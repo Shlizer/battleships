@@ -37,7 +37,7 @@ namespace Battleships.Services.Stage
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(loadingScreenBG, new Rectangle(0, 0, Graphics.canvas.Viewport.Width, Graphics.canvas.Viewport.Height), Color.White);
+            spriteBatch.Draw(loadingScreenBG, new Rectangle(0, 0, UIManager.getGfxDevice().Viewport.Width, UIManager.getGfxDevice().Viewport.Height), Color.White);
             spriteBatch.End();
         }
     }

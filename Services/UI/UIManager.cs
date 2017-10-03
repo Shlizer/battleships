@@ -14,7 +14,7 @@ namespace Battleships.Services.UI
             _content = content;
         }
 
-        public static GraphicsDevice getGraphicsDevice()
+        public static GraphicsDevice getGfxDevice()
         {
             return _graphicsDevice;
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Threading;
 using System.Diagnostics;
 using System;
 using Battleships.Services;
@@ -60,12 +59,6 @@ namespace Battleships
         protected override void LoadContent()
         {
             debugFont = Content.Load<SpriteFont>("font/debug");
-            //stageSplash.LoadContent();
-            //stageMenu.LoadContent();
-            //stageOptions.LoadContent();
-            //stageAuthor.LoadContent();
-            //stagePlaying.LoadContent();
-            //stageScoreboard.LoadContent();
         }
 
         /**

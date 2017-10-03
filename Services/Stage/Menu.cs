@@ -1,5 +1,6 @@
 ﻿using Battleships.Services;
 using Battleships.Services.UI;
+using Battleships.Services.UI.Elements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,24 +10,25 @@ namespace Battleships.Services.Stage
     class Menu : BaseStage
     {
         private SpriteBatch spriteBatch;
-        private Texture2D loadingScreenBG;
+        private Texture2D screenBG;
         private Dialog dialog;
-        private float splashAlpha = 1.0f;
+        private float stageAlpha = 1.0f;
 
         public Menu(GraphicsDevice graphicsDevice, ContentManager content, UIManager uiManager) : base(graphicsDevice, content, uiManager) {}
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(_graphicsDevice);
-            dialog = new Dialog();
-            loadingScreenBG = _content.Load<Texture2D>("images/loading");
+            screenBG = _content.Load<Texture2D>("images/loading");
+
+            dialog = new Dialog(DialogType.Red, new Rectangle(15, 15, 350, 200));
         }
 
         public override GameStage Update(GameTime gameTime)
         {
-            if (splashAlpha >= 0.5f)
+            if (stageAlpha >= 0.5f)
             {
-                splashAlpha -= 0.01f;
+                stageAlpha -= 0.01f;
             }
             return GameStage.Menu;
         }
@@ -36,11 +38,11 @@ namespace Battleships.Services.Stage
             _graphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            spriteBatch.Draw(loadingScreenBG, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White * splashAlpha);
+            spriteBatch.Draw(screenBG, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White * stageAlpha);
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            dialog.Draw();
+            dialog.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
