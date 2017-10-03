@@ -46,17 +46,18 @@
     <Compile Include="Services\FrameCounter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\GameState.cs" />
+    <Compile Include="Services\Stage\BaseStage.cs" />
+    <Compile Include="Services\Stage\GameStage.cs" />
+    <Compile Include="Services\Stage\GameStageManager.cs" />
+    <Compile Include="Services\UI\Helpers\Image.cs" />
+    <Compile Include="Services\UI\IElement.cs" />
     <Compile Include="Services\Settings.cs" />
-    <Compile Include="Services\UI\Dialog.cs" />
-    <Compile Include="Services\Graphics.cs" />
-    <Compile Include="Stage\IStage.cs" />
-    <Compile Include="Stage\Playing.cs" />
-    <Compile Include="Stage\Scoreboard.cs" />
-    <Compile Include="Stage\Author.cs" />
-    <Compile Include="Stage\Options.cs" />
-    <Compile Include="Stage\Splash.cs" />
-    <Compile Include="Stage\Menu.cs" />
+    <Compile Include="Services\UI\Elements\Dialog.cs" />
+    <Compile Include="Services\UI\HasChildren.cs" />
+    <Compile Include="Services\UI\UIManager.cs" />
+    <Compile Include="Services\Stage\IStage.cs" />
+    <Compile Include="Services\Stage\Splash.cs" />
+    <Compile Include="Services\Stage\Menu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
