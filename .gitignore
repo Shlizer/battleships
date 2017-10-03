@@ -3,3 +3,7 @@
 ################################################################################
 
 /bin/DesktopGL/AnyCPU/Debug
+/Content/obj/DesktopGL
+/Content/Debug.xnb
+/Content/loading.xnb
+/obj/Debug
