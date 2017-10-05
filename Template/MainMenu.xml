@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<UIScheme>
+  <Dialog>
+    <Type>Blue</Type>
+    <Position>
+      <X>43</X>
+      <Y>100</Y>
+      <Width>350</Width>
+      <Height>200</Height>
+    </Position>
+  </Dialog>
+</UIScheme>

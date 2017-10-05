@@ -1,44 +1,39 @@
-﻿using Battleships.Services.UI;
+﻿using Battleships.Services.Stage.Helpers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Battleships.Services.Stage
 {
-    class Splash : BaseStage
+    public class Splash : BaseStage
     {
         private Texture2D loadingScreenBG;
-        private SpriteBatch spriteBatch;
 
         private float timerExit = 0.0f;
-        private float _remainingTimeExit;
+        private float remainingTimeExit;
         
-        public Splash(GraphicsDevice graphicsDevice, ContentManager content, UIManager uiManager) : base(graphicsDevice, content, uiManager) { }
-        
-        protected override void LoadContent()
+        public override void LoadContent()
         {
-            _remainingTimeExit = Settings.GfxSplashTime;
-            spriteBatch = new SpriteBatch(_graphicsDevice);
-            loadingScreenBG = _content.Load<Texture2D>("images/loading");
+            base.LoadContent();
+            remainingTimeExit = Settings.GfxSplashTime;
+            loadingScreenBG = content.Load<Texture2D>("image/loading");
         }
 
-        public override GameStage Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (timerExit.Equals(0.0f))
                 timerExit = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            _remainingTimeExit -= timerExit;
+            remainingTimeExit -= timerExit;
 
-            if (_remainingTimeExit <= 0)
-                return GameStage.Menu;
-            return GameStage.Splash;
+            if (remainingTimeExit <= 0)
+                GameStageManager.Instance.ChangeStage("MainMenu");
+                //GameStageManager.PushStage(new Menu());
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-            spriteBatch.Draw(loadingScreenBG, new Rectangle(0, 0, UIManager.getGfxDevice().Viewport.Width, UIManager.getGfxDevice().Viewport.Height), Color.White);
-            spriteBatch.End();
+            Viewport Viewport = GameStageManager.Instance.GraphicsDevice.Viewport;
+            spriteBatch.Draw(loadingScreenBG, new Rectangle(0, 0, Viewport.Width, Viewport.Height), Color.White);
         }
     }
 }

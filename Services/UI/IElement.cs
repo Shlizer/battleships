@@ -2,7 +2,7 @@
 
 namespace Battleships.Services.UI
 {
-    interface IElement
+    public interface IElement
     {
         //void Update(Rectangle parentRect);
         void Update();

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Battleships.Services.UI
 {
-    class UIManager : HasChildren
+    class UIManager// : HasChildren
     {
         private static GraphicsDevice _graphicsDevice;
         private static ContentManager _content;

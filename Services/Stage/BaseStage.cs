@@ -1,26 +1,67 @@
-﻿using Battleships.Services.UI;
+﻿using Battleships.Services.Stage.Helpers;
+using Battleships.Services.UI.Elements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Battleships.Services.Stage
 {
-    abstract class BaseStage
+    public abstract class BaseStage : IStage
     {
-        protected ContentManager _content;
-        protected GraphicsDevice _graphicsDevice;
-        protected UIManager _uiManager;
+        public UIScheme uiScheme;
+        [XmlIgnore]
+        protected ContentManager content;
+        [XmlIgnore]
+        public Type stageType;
+        [XmlIgnore]
+        public string XmlPath;
 
-        public BaseStage(GraphicsDevice graphicsDevice, ContentManager content, UIManager uiManager)
+        public BaseStage()
         {
-            _content = content;
-            _graphicsDevice = graphicsDevice;
-            _uiManager = uiManager;
-            LoadContent();
+            stageType = GetType();
+            XmlPath = "Template/" + stageType.ToString().Replace("Battleships.Services.Stage.", "") + ".xml";
         }
 
-        abstract public GameStage Update(GameTime gameTime);
-        abstract public void Draw(GameTime gameTime);
-        abstract protected void LoadContent();
+        public virtual void LoadContent()
+        {
+            content = new ContentManager(GameStageManager.Instance.Content.ServiceProvider, "Content");
+
+            if (File.Exists(XmlPath))
+            {
+                var xml = File.ReadAllText(XmlPath);
+                var xmlSerializer = new XmlSerializer(typeof(UIScheme));
+                var xmlReader = XmlReader.Create(new StringReader(xml));
+                uiScheme = (UIScheme)xmlSerializer.Deserialize(xmlReader);
+                /*
+                using (TextReader reader = new StreamReader(XmlPath))
+                {
+                   var stage =(BaseStage)xmlDeserializer.Deserialize(reader);
+                    stage.FromXml();
+                    UIScheme = stage.UIScheme;//.FromXml()
+                    //UIScheme = (BaseChildren)xmlDeserializer.Deserialize(reader);
+                    //UIScheme = xmlDeserializer.ReadXml(reader);
+                    //XmlStageDeserializer<Base> xml = new XmlStageDeserializer<Base>(Type);
+                    //instance = (T)xml.Deserialize(reader);
+                }*/
+            }
+        }
+
+        public virtual void UnloadContent()
+        {
+            content.Unload();
+        }
+
+        public virtual void Update(GameTime gameTime)
+        {
+            //InputManager.Instance.Update();
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+        }
     }
 }

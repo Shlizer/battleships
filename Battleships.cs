@@ -4,17 +4,16 @@ using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System;
 using Battleships.Services;
-using Battleships.Services.UI;
-using Battleships.Services.Stage;
+using Battleships.Services.Stage.Helpers;
 
 namespace Battleships
 {
     public class Battleships : Game
     {
-        private GraphicsDeviceManager canvas;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
         private FrameCounter frameCounter = new FrameCounter();
-        private GameStageManager gameStateManager;
-        private UIManager uiManager;
         private SpriteFont debugFont;
         
         /**
@@ -22,7 +21,7 @@ namespace Battleships
          */
         public Battleships()
         {
-            canvas = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Window.IsBorderless = true;
             Window.Title = "Battleships";
@@ -36,8 +35,6 @@ namespace Battleships
         protected override void Initialize()
         {
             LoadSettings();
-            uiManager = new UIManager(GraphicsDevice, Content);
-            gameStateManager = new GameStageManager(GraphicsDevice, Content, uiManager);
             base.Initialize();
         }
 
@@ -47,10 +44,10 @@ namespace Battleships
         protected void LoadSettings()
         {
             Settings.LoadSettings();
-            canvas.PreferredBackBufferWidth = Settings.GfxResolutionW;
-            canvas.PreferredBackBufferHeight = Settings.GfxResolutionH;
-            canvas.IsFullScreen = Settings.GfxFullscreen;
-            canvas.ApplyChanges();
+            graphics.PreferredBackBufferWidth = Settings.GfxResolutionW;
+            graphics.PreferredBackBufferHeight = Settings.GfxResolutionH;
+            graphics.IsFullScreen = Settings.GfxFullscreen;
+            graphics.ApplyChanges();
         }
 
         /**
@@ -59,6 +56,11 @@ namespace Battleships
         protected override void LoadContent()
         {
             debugFont = Content.Load<SpriteFont>("font/debug");
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            GameStageManager.Instance.GraphicsDevice = GraphicsDevice;
+            GameStageManager.Instance.SpriteBatch = spriteBatch;
+            GameStageManager.Instance.Content = Content;
+            GameStageManager.Instance.ChangeStage("Splash");
         }
 
         /**
@@ -66,7 +68,7 @@ namespace Battleships
          */
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            GameStageManager.Instance.Content.Unload();
         }
 
         /**
@@ -74,13 +76,12 @@ namespace Battleships
          */
         protected override void Update(GameTime gameTime)
         {
-            if (!gameStateManager.Update(gameTime))
-                Exit();
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 LoadSettings();
+
+            GameStageManager.Instance.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -90,7 +91,10 @@ namespace Battleships
          */
         protected override void Draw(GameTime gameTime)
         {
-            gameStateManager.Draw(gameTime);
+            spriteBatch.Begin();
+            GameStageManager.Instance.Draw(spriteBatch);
+            spriteBatch.End();
+
 
             if (Settings.DebugShow)
                 ShowDebugInfo(gameTime);
@@ -110,11 +114,11 @@ namespace Battleships
             TimeSpan time =  DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
 
             string debugInfo =
-                string.Format("FPS: {0}\n",frameCounter.Draw(gameTime)) +
+                string.Format("FPS: {0}\n", frameCounter.Draw(gameTime)) +
                 string.Format("MEM: {0}MB\n", proc.PrivateMemorySize64 / 1024 / 1024) +
                 string.Format("CPU: {0}%\n", cpuCounter.NextValue()) +
-                string.Format("TIME: {0:hh\\:mm\\:ss}\n", time) +
-                "STAGE: "+gameStateManager.GetStage();
+                string.Format("TIME: {0:hh\\:mm\\:ss}\n", time);// +
+                //"STAGE: "+ GameStageManager..GetStage();
 
             spriteBatch.Begin();
             spriteBatch.DrawString(debugFont, debugInfo, new Vector2(x + 0, y + 1), Color.Black);

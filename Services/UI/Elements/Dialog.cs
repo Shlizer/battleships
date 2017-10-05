@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Battleships.Services.UI.Elements
 {
-    enum DialogType
+    public enum DialogType
     {
         Raw,
         Blue,
@@ -13,23 +13,26 @@ namespace Battleships.Services.UI.Elements
         Yellow
     }
 
-    class Dialog : HasChildren
+    public class Dialog : BaseChildren
     {
-        private DialogType _textureType = DialogType.Raw;
+        public DialogType Type = DialogType.Raw;
+        public Rectangle Position = new Rectangle(0, 0, 0, 0);
+
         private Texture2D[] _texture = new Texture2D[9];
-        private Rectangle _position = new Rectangle(0, 0, 0, 0);
+
+        private Dialog() { }
 
         public Dialog(Rectangle position)
         {
-            _textureType = DialogType.Raw;
-            _position = position;
+            Type = DialogType.Raw;
+            Position = position;
             GetTextures();
         }
 
         public Dialog(DialogType type, Rectangle position)
         {
-            _textureType = type;
-            _position = position;
+            Type = type;
+            Position = position;
             GetTextures();
         }
 
@@ -48,35 +51,35 @@ namespace Battleships.Services.UI.Elements
 
         protected string GetTextureName()
         {
-            switch (_textureType)
+            switch (Type)
             {
                 case DialogType.Blue:
-                    return "images/ui/metalPanel_blue";
+                    return "image/ui/metalPanel_blue";
                 case DialogType.Green:
-                    return "images/ui/metalPanel_green";
+                    return "image/ui/metalPanel_green";
                 case DialogType.Red:
-                    return "images/ui/metalPanel_red";
+                    return "image/ui/metalPanel_red";
                 case DialogType.Yellow:
-                    return "images/ui/metalPanel_yellow";
+                    return "image/ui/metalPanel_yellow";
             }
 
-            return "images/ui/metalPanel";
+            return "image/ui/metalPanel";
         }
 
         public override void Draw(SpriteBatch canvas)
         {
             // Center
-            Image.TileInXYAsis(canvas, _texture[4], _position.X+_texture[3].Width, _position.Y+_texture[1].Height, _position.Width-_texture[3].Width-_texture[5].Width, _position.Height-_texture[1].Height-_texture[7].Height);
+            Image.TileInXYAsis(canvas, _texture[4], Position.X+_texture[3].Width, Position.Y+_texture[1].Height, Position.Width-_texture[3].Width-_texture[5].Width, Position.Height-_texture[1].Height-_texture[7].Height);
             // Borders
-            Image.TileInXAsis(canvas, _texture[1], _position.X + _texture[0].Width, _position.Y, _position.Width - _texture[0].Width - _texture[2].Width);
-            Image.TileInXAsis(canvas, _texture[7], _position.X + _texture[6].Width, _position.Y+_position.Height-_texture[7].Height, _position.Width - _texture[6].Width - _texture[8].Width);
-            Image.TileInYAsis(canvas, _texture[3], _position.X, _position.Y + _texture[0].Height, _position.Height - _texture[0].Height - _texture[6].Height);
-            Image.TileInYAsis(canvas, _texture[5], _position.X + _position.Width-_texture[3].Width, _position.Y + _texture[1].Height, _position.Height - _texture[2].Height - _texture[8].Height);
+            Image.TileInXAsis(canvas, _texture[1], Position.X + _texture[0].Width, Position.Y, Position.Width - _texture[0].Width - _texture[2].Width);
+            Image.TileInXAsis(canvas, _texture[7], Position.X + _texture[6].Width, Position.Y+Position.Height-_texture[7].Height, Position.Width - _texture[6].Width - _texture[8].Width);
+            Image.TileInYAsis(canvas, _texture[3], Position.X, Position.Y + _texture[0].Height, Position.Height - _texture[0].Height - _texture[6].Height);
+            Image.TileInYAsis(canvas, _texture[5], Position.X + Position.Width-_texture[3].Width, Position.Y + _texture[1].Height, Position.Height - _texture[2].Height - _texture[8].Height);
             // Corners
-            canvas.Draw(_texture[0], new Rectangle(_position.X, _position.Y, _texture[0].Width, _texture[0].Height), Color.White);
-            canvas.Draw(_texture[2], new Rectangle(_position.X+_position.Width-_texture[2].Width, _position.Y, _texture[2].Width, _texture[2].Height), Color.White);
-            canvas.Draw(_texture[6], new Rectangle(_position.X, _position.Y+_position.Height-_texture[6].Height, _texture[6].Width, _texture[6].Height), Color.White);
-            canvas.Draw(_texture[8], new Rectangle(_position.X + _position.Width - _texture[8].Width, _position.Y + _position.Height - _texture[8].Height, _texture[8].Width, _texture[8].Height), Color.White);
+            canvas.Draw(_texture[0], new Rectangle(Position.X, Position.Y, _texture[0].Width, _texture[0].Height), Color.White);
+            canvas.Draw(_texture[2], new Rectangle(Position.X+Position.Width-_texture[2].Width, Position.Y, _texture[2].Width, _texture[2].Height), Color.White);
+            canvas.Draw(_texture[6], new Rectangle(Position.X, Position.Y+Position.Height-_texture[6].Height, _texture[6].Width, _texture[6].Height), Color.White);
+            canvas.Draw(_texture[8], new Rectangle(Position.X + Position.Width - _texture[8].Width, Position.Y + Position.Height - _texture[8].Height, _texture[8].Width, _texture[8].Height), Color.White);
         }
     }
 }
